@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Clock</title>
+
+<style>
+
+	body{
+		width:100%;
+		height:100%;
+		/*position:relative;//这个会让页面出现横向滚动条*/
+		/*overflow:hidden;*/
+		/*background-color:#000000;*/
+	}
+	
+	#myCnvs{
+		position:absolute;
+		top:100px;
+		left:50%;
+		margin:0 0 0 -152px;
+		background-color:#FFFFFF;	
+	}
+
+</style>
+
+<script>
+
+	function start(){
+		var c = document.getElementById("myCnvs"),
+			ctx = c.getContext("2d");
+		
+		function draw(){
+			var x = 152,
+				y = 152,
+				r = 150;
+				
+		ctx.clearRect(0,0,c.width,c.height);
+		
+		var cDate = new Date(),
+			cHours = cDate.getHours(),
+			cMin = cDate.getMinutes(),
+			cSed = cDate.getSeconds();
+			
+		var hValue = (-90 + cHours*30 + cMin/2)*Math.PI/180,
+			mValue = (-90 + cMin*6)*Math.PI/180,
+			sValue = (-90 + cSed*6)*Math.PI/180;
+		
+		/*细刻度开始*/	
+		ctx.beginPath();
+		for(var i=0;i<60;i++){
+			ctx.moveTo(x,y);
+			ctx.arc(x,y,r,6*i*Math.PI/180,6*(i+1)*Math.PI/180,false);
+		}
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.fillStyle ="white";
+		ctx.beginPath();
+		ctx.arc(x,y,r*19/20,0,Math.PI*2,false);
+		ctx.closePath();
+		ctx.fill();
+		
+		/*粗刻度开始*/
+		ctx.lineWidth = "3";
+		ctx.beginPath();
+		for(var i=0;i<12;i++){
+			ctx.moveTo(x,y);
+			ctx.arc(x,y,r,30*i*Math.PI/180,30*(i+1)*Math.PI/180,false);
+		}
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.fillStyle ="white";
+		ctx.beginPath();
+		ctx.arc(x,y,r*18/20,0,Math.PI*2,false);
+		ctx.closePath();
+		ctx.fill();
+		
+		/*表盘边缘开始*/
+		ctx.strokeStyle ="white";
+		ctx.lineWidth ="7";
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,Math.PI*2,false);
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.strokeStyle ="black";
+		ctx.lineWidth ="1";
+		ctx.beginPath();
+		ctx.arc(x,y,r,0,Math.PI*2,false);
+		ctx.closePath();
+		ctx.stroke();
+		/*表盘结束*/
+		
+		/*指针开始*/
+		ctx.lineWidth ="4";
+		ctx.beginPath();
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,r*10/20,hValue,hValue,false);
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.lineWidth ="2";
+		ctx.beginPath();
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,r*15/20,mValue,mValue,false);
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.lineWidth ="1";
+		ctx.beginPath();
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,r*18/20,sValue,sValue,false);
+		ctx.closePath();
+		ctx.stroke();
+		
+		ctx.fillStyle ="black";
+		ctx.beginPath();
+		ctx.moveTo(x,y);
+		ctx.arc(x,y,5,0,Math.PI*2,false);
+		ctx.closePath();
+		ctx.fill();
+		
+		}
+		
+		draw();
+		setInterval(draw,1000);
+		
+	}
+	
+	window.onload = start;
+
+</script>
+</head>
+
+<body>
+	<canvas id="myCnvs" width="304" height="304"></canvas>
+</body>
+</html>
